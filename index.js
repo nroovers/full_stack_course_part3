@@ -30,10 +30,18 @@ app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
 })
 
+app.get('/info', (req, res) => {
+    var resText = ''
+    resText += `<div>Phonebook has info for ${persons.length} people</div>`
+    resText += `<div>${new Date()}</div>`
+    res.send(resText)
+})
+
 app.get('/api/persons', (req, res) => {
     console.log(`call ${req.originalUrl}`)
     res.json(persons)
 })
+
 
 const PORT = 3001
 app.listen(PORT, () => {
