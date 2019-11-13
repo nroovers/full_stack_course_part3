@@ -71,9 +71,24 @@ app.post('/api/persons', (req, res) => {
 
     const person = req.body
     console.log(person)
+
+    if (!person.name)
+        return res.status(400).json({
+            error: 'name missing'
+        })
+
+    if (!person.number)
+        return res.status(400).json({
+            error: 'number missing'
+        })
+
+    if (persons.find(p => p.name === person.name))
+        return res.status(400).json({
+            error: `person with name ${person.name} already exists`
+        })
+
     person.id = Math.floor(Math.random() * 1000) + 1
     persons = persons.concat(person)
-
     res.json(person)
 })
 
