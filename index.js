@@ -1,8 +1,10 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 app.use(bodyParser.json())
+app.use(morgan('tiny'))
 
 
 let persons =
@@ -42,12 +44,12 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-    console.log(`get ${req.originalUrl}`)
+    // console.log(`get ${req.originalUrl}`)
     res.json(persons)
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    console.log(`get ${req.originalUrl}`)
+    // console.log(`get ${req.originalUrl}`)
     const id = Number(req.params.id)
     const person = persons.find(p => p.id === id)
     if (person) {
@@ -57,20 +59,20 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-    console.log(`delete ${req.originalUrl}`)
+    // console.log(`delete ${req.originalUrl}`)
     const id = Number(req.params.id)
-    console.log(persons.length)
+    // console.log(persons.length)
     persons = persons.filter(p => p.id !== id)
-    console.log(persons.length)
+    // console.log(persons.length)
     res.status(204).end()
 })
 
 
 app.post('/api/persons', (req, res) => {
-    console.log(`post ${req.originalUrl}`)
+    // console.log(`post ${req.originalUrl}`)
 
     const person = req.body
-    console.log(person)
+    // console.log(person)
 
     if (!person.name)
         return res.status(400).json({
