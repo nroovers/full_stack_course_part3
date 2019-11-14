@@ -98,14 +98,19 @@ app.post('/api/persons', (req, res) => {
             error: 'number missing'
         })
 
-    if (persons.find(p => p.name === person.name))
-        return res.status(400).json({
-            error: `person with name ${person.name} already exists`
-        })
+    // if (persons.find(p => p.name === person.name))
+    //     return res.status(400).json({
+    //         error: `person with name ${person.name} already exists`
+    //     })
 
-    person.id = Math.floor(Math.random() * 1000) + 1
-    persons = persons.concat(person)
-    res.json(person)
+    const newPerson = Person({
+        name: person.name,
+        number: person.number
+    })
+
+    newPerson.save().then(savedPerson => {
+        res.json(savedPerson.toJSON())
+    })
 })
 
 const PORT = process.env.PORT
