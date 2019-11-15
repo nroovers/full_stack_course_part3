@@ -73,12 +73,15 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-    // console.log(`delete ${req.originalUrl}`)
-    const id = Number(req.params.id)
-    // console.log(persons.length)
-    persons = persons.filter(p => p.id !== id)
-    // console.log(persons.length)
-    res.status(204).end()
+    Person.findByIdAndRemove(req.params.id)
+        .then(result => {
+            console.log('person removed: ', result)
+            res.status(204).end()
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(400).send({ error: 'malformatted id' })
+        })
 })
 
 
@@ -112,6 +115,17 @@ app.post('/api/persons', (req, res) => {
         res.json(savedPerson.toJSON())
     })
 })
+
+
+const unknownEndpoint = (req, res) => {
+    res.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+
+
+
 
 const PORT = process.env.PORT
 app.listen(PORT, '0.0.0.0', () => {
